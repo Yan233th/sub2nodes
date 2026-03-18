@@ -2,5 +2,5 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "sub2nodes",
   "main": "src/index.ts",
-  "compatibility_date": "2026-03-19"
+  "compatibility_date": "2026-03-18"
 }
