@@ -55,14 +55,9 @@ export async function handleRequest(request: Request): Promise<Response> {
 }
 
 async function resolveSource(url: URL): Promise<string> {
-  const inline = url.searchParams.get("config");
-  if (inline && inline.trim()) {
-    return inline;
-  }
-
   const remoteUrl = url.searchParams.get("url");
   if (!remoteUrl) {
-    throw withStatus(new Error("Provide ?url= or ?config=."), 400);
+    throw withStatus(new Error("Provide ?url=."), 400);
   }
 
   let target: URL;
@@ -148,7 +143,6 @@ function renderHome(url: URL): string {
         margin: 14px 0 6px;
       }
       input,
-      textarea,
       select,
       button {
         width: 100%;
@@ -156,29 +150,15 @@ function renderHome(url: URL): string {
         font: inherit;
       }
       input,
-      textarea,
       select {
         border: 1px solid #b5a48a;
         padding: 10px 12px;
         background: #fff;
       }
-      textarea {
-        min-height: 180px;
-        resize: vertical;
-      }
       .row {
         display: grid;
         grid-template-columns: 1fr 140px;
         gap: 12px;
-      }
-      .check {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 14px;
-      }
-      .check input {
-        width: auto;
       }
       button {
         border: 0;
@@ -207,9 +187,6 @@ function renderHome(url: URL): string {
         <label for="url">Remote URL</label>
         <input id="url" placeholder="https://example.com/subscription" />
 
-        <label for="config">Inline config</label>
-        <textarea id="config" placeholder="Paste raw links, Clash YAML, Xray JSON, or Sing-Box JSON"></textarea>
-
         <div class="row">
           <div>
             <label for="format">Format hint</label>
@@ -234,27 +211,24 @@ function renderHome(url: URL): string {
 
         <label for="result">Generated link</label>
         <input id="result" readonly />
-        <p class="muted">If both remote URL and inline config are filled, inline config wins.</p>
+        <p class="muted">The generated link converts your remote source on demand.</p>
 
         <div class="actions">
           <button id="copy" type="button">Copy</button>
-          <button id="open" type="button">Open</button>
+          <button id="preview" type="button">Preview</button>
         </div>
       </div>
     </main>
     <script>
       const endpoint = ${JSON.stringify(base)};
       const urlInput = document.getElementById("url");
-      const configInput = document.getElementById("config");
       const formatInput = document.getElementById("format");
       const base64Input = document.getElementById("base64");
       const resultInput = document.getElementById("result");
 
       function buildLink() {
         const target = new URL(endpoint);
-        if (configInput.value.trim()) {
-          target.searchParams.set("config", configInput.value);
-        } else if (urlInput.value.trim()) {
+        if (urlInput.value.trim()) {
           target.searchParams.set("url", urlInput.value.trim());
         }
         if (formatInput.value) {
@@ -271,7 +245,7 @@ function renderHome(url: URL): string {
           await navigator.clipboard.writeText(resultInput.value);
         }
       });
-      document.getElementById("open").addEventListener("click", () => {
+      document.getElementById("preview").addEventListener("click", () => {
         buildLink();
         if (resultInput.value) {
           window.open(resultInput.value, "_blank", "noopener,noreferrer");

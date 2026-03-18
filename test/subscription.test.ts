@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { handleRequest } from "../src/index";
 import { convertInput, encodeSubscription } from "../src/subscription";
@@ -13,6 +13,10 @@ function encodeBase64(input: string): string {
 }
 
 describe("subscription conversion", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("parses raw links and re-encodes them", () => {
     const vmessPayload = encodeBase64(
       JSON.stringify({
@@ -146,14 +150,30 @@ proxies:
     expect(encodeSubscription(result.nodes, false)).toContain("trojan://");
   });
 
-  it("serves GET /sub with inline config", async () => {
+  it("serves GET /sub from a remote URL", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        "vless://55555555-5555-5555-5555-555555555555@demo.example.com:443?security=tls#demo",
+      ),
+    );
+
     const request = new Request(
-      "https://example.com/sub?config=vless%3A%2F%2F55555555-5555-5555-5555-555555555555%40demo.example.com%3A443%3Fsecurity%3Dtls%23demo&base64=false",
+      "https://example.com/sub?url=https%3A%2F%2Fupstream.example%2Fsub&base64=false",
     );
 
     const response = await handleRequest(request);
     expect(response.status).toBe(200);
     expect(response.headers.get("x-sub2nodes-format")).toBe("raw-links");
     expect(await response.text()).toContain("vless://");
+  });
+
+  it("rejects inline config-only requests", async () => {
+    const request = new Request(
+      "https://example.com/sub?config=vless%3A%2F%2F55555555-5555-5555-5555-555555555555%40demo.example.com%3A443%3Fsecurity%3Dtls%23demo",
+    );
+
+    const response = await handleRequest(request);
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: "Provide ?url=." });
   });
 });
