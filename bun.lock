@@ -1,8 +1,10 @@
 {
   "lockfileVersion": 1,
-  "configVersion": 1,
   "workspaces": {
     "": {
+      "dependencies": {
+        "yaml": "^2.8.2",
+      },
       "devDependencies": {
         "typescript": "^5.9.3",
         "vitest": "^4.1.0",
@@ -326,6 +328,8 @@
     "wrangler": ["wrangler@4.75.0", "https://registry.npmmirror.com/wrangler/-/wrangler-4.75.0.tgz", { "dependencies": { "@cloudflare/kv-asset-handler": "0.4.2", "@cloudflare/unenv-preset": "2.15.0", "blake3-wasm": "2.1.5", "esbuild": "0.27.3", "miniflare": "4.20260317.0", "path-to-regexp": "6.3.0", "unenv": "2.0.0-rc.24", "workerd": "1.20260317.1" }, "optionalDependencies": { "fsevents": "~2.3.2" }, "peerDependencies": { "@cloudflare/workers-types": "^4.20260317.1" }, "optionalPeers": ["@cloudflare/workers-types"], "bin": { "wrangler": "bin/wrangler.js", "wrangler2": "bin/wrangler.js" } }, "sha512-Efk1tcnm4eduBYpH1sSjMYydXMnIFPns/qABI3+fsbDrUk5GksNYX8nYGVP4sFygvGPO7kJc36YJKB5ooA7JAg=="],
 
     "ws": ["ws@8.18.0", "https://registry.npmmirror.com/ws/-/ws-8.18.0.tgz", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw=="],
+
+    "yaml": ["yaml@2.8.2", "https://registry.npmmirror.com/yaml/-/yaml-2.8.2.tgz", { "bin": { "yaml": "bin.mjs" } }, "sha512-mplynKqc1C2hTVYxd0PU2xQAc22TI1vShAYGksCCfxbn/dFwnHTNi1bvYsBTkhdUNtGIf5xNOg938rrSSYvS9A=="],
 
     "youch": ["youch@4.1.0-beta.10", "https://registry.npmmirror.com/youch/-/youch-4.1.0-beta.10.tgz", { "dependencies": { "@poppinss/colors": "^4.1.5", "@poppinss/dumper": "^0.6.4", "@speed-highlight/core": "^1.2.7", "cookie": "^1.0.2", "youch-core": "^0.3.3" } }, "sha512-rLfVLB4FgQneDr0dv1oddCVZmKjcJ6yX6mS4pU82Mq/Dt9a3cLZQ62pDBL4AUO+uVrCvtWz3ZFUL2HFAFJ/BXQ=="],
 
