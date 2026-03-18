@@ -137,10 +137,22 @@ function renderHome(url: URL): string {
         border: 1px solid #d7cbb8;
         padding: 18px;
       }
+      .controls {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 152px;
+        gap: 12px;
+        align-items: end;
+      }
+      .field {
+        min-width: 0;
+      }
       label {
         display: block;
         font-weight: 600;
         margin: 14px 0 6px;
+      }
+      .controls label {
+        margin-top: 0;
       }
       input,
       select,
@@ -154,11 +166,6 @@ function renderHome(url: URL): string {
         border: 1px solid #b5a48a;
         padding: 10px 12px;
         background: #fff;
-      }
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 140px;
-        gap: 12px;
       }
       button {
         border: 0;
@@ -177,6 +184,15 @@ function renderHome(url: URL): string {
         color: #5e5548;
         font-size: 0.95rem;
       }
+      code {
+        font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+        font-size: 0.92em;
+      }
+      @media (max-width: 640px) {
+        .controls {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -184,21 +200,13 @@ function renderHome(url: URL): string {
       <h1>sub2nodes</h1>
       <p>Minimal converter for raw links, Clash YAML, Xray/V2Ray JSON, and Sing-Box JSON.</p>
       <div class="panel">
-        <label for="url">Remote URL</label>
-        <input id="url" placeholder="https://example.com/subscription" />
-
-        <div class="row">
-          <div>
-            <label for="format">Format hint</label>
-            <select id="format">
-              <option value="">auto</option>
-              <option value="raw">raw-links</option>
-              <option value="clash">clash</option>
-              <option value="xray">xray-json</option>
-              <option value="sing-box">sing-box-json</option>
-            </select>
+        <div class="controls">
+          <div class="field">
+            <label for="url">Remote URL</label>
+            <input id="url" placeholder="https://example.com/subscription" />
           </div>
-          <div>
+
+          <div class="field">
             <label for="base64">Wrap output</label>
             <select id="base64">
               <option value="true">base64</option>
@@ -222,7 +230,6 @@ function renderHome(url: URL): string {
     <script>
       const endpoint = ${JSON.stringify(base)};
       const urlInput = document.getElementById("url");
-      const formatInput = document.getElementById("format");
       const base64Input = document.getElementById("base64");
       const resultInput = document.getElementById("result");
 
@@ -230,9 +237,6 @@ function renderHome(url: URL): string {
         const target = new URL(endpoint);
         if (urlInput.value.trim()) {
           target.searchParams.set("url", urlInput.value.trim());
-        }
-        if (formatInput.value) {
-          target.searchParams.set("format", formatInput.value);
         }
         target.searchParams.set("base64", base64Input.value);
         resultInput.value = target.toString();
